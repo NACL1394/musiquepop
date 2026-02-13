@@ -2,50 +2,56 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Chanson N°1 à ta naissance</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 15px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
 
         .container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
             width: 100%;
+            margin: 0 auto;
         }
 
         h1 {
             color: #667eea;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
-            font-size: 2em;
+            font-size: 1.8em;
+            line-height: 1.2;
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 30px;
-            font-size: 0.9em;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+            line-height: 1.4;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         label {
@@ -53,15 +59,26 @@
             margin-bottom: 8px;
             color: #333;
             font-weight: 600;
+            font-size: 1em;
         }
 
         select, input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             transition: border-color 0.3s;
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
         }
 
         select:focus, input:focus {
@@ -71,29 +88,25 @@
 
         button {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            margin-top: 5px;
         }
 
         button:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .result {
-            margin-top: 30px;
-            padding: 25px;
+            margin-top: 25px;
+            padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
             display: none;
@@ -101,7 +114,7 @@
 
         .result.show {
             display: block;
-            animation: slideIn 0.5s ease;
+            animation: slideIn 0.4s ease;
         }
 
         @keyframes slideIn {
@@ -116,16 +129,18 @@
         }
 
         .song-title {
-            font-size: 1.5em;
+            font-size: 1.4em;
             color: #667eea;
             font-weight: bold;
             margin-bottom: 10px;
+            line-height: 1.3;
         }
 
         .artist {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .date-info {
@@ -139,29 +154,42 @@
             margin-top: 20px;
         }
 
-        .spotify-player {
-            width: 100%;
-            border-radius: 12px;
+        .music-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-top: 15px;
         }
 
-        .spotify-link {
-            display: inline-flex;
+        .spotify-search-btn, .applemusic-search-btn {
+            display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: #1DB954;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
             color: white;
             text-decoration: none;
-            border-radius: 25px;
+            border-radius: 12px;
             font-weight: 600;
-            transition: background 0.3s, transform 0.2s;
-            margin-top: 10px;
+            transition: transform 0.2s;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .spotify-link:hover {
-            background: #1ed760;
-            transform: translateY(-2px);
+        .spotify-search-btn {
+            background: #1DB954;
+        }
+
+        .spotify-search-btn:active {
+            transform: scale(0.98);
+        }
+
+        .applemusic-search-btn {
+            background: linear-gradient(135deg, #FA233B 0%, #FB5C74 100%);
+        }
+
+        .applemusic-search-btn:active {
+            transform: scale(0.98);
         }
 
         .loading {
@@ -169,6 +197,7 @@
             color: #667eea;
             font-weight: 600;
             display: none;
+            padding: 10px;
         }
 
         .loading.show {
@@ -180,6 +209,9 @@
             text-align: center;
             margin-top: 15px;
             display: none;
+            padding: 10px;
+            background: #ffe5e5;
+            border-radius: 8px;
         }
 
         .error.show {
@@ -189,56 +221,51 @@
         .spotify-note {
             font-size: 0.85em;
             color: #888;
-            margin-top: 10px;
+            margin-top: 12px;
+            text-align: center;
             font-style: italic;
         }
 
-        .music-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
+        /* Optimisations pour très petits écrans */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .song-title {
+                font-size: 1.2em;
+            }
+            
+            .artist {
+                font-size: 1em;
+            }
+            
+            button {
+                font-size: 16px;
+                padding: 14px;
+            }
         }
 
-        .spotify-search-btn, .applemusic-search-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: background 0.3s, transform 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .spotify-search-btn {
-            background: #1DB954;
-        }
-
-        .spotify-search-btn:hover {
-            background: #1ed760;
-            transform: translateY(-2px);
-        }
-
-        .applemusic-search-btn {
-            background: linear-gradient(135deg, #FA233B 0%, #FB5C74 100%);
-        }
-
-        .applemusic-search-btn:hover {
-            background: linear-gradient(135deg, #FB5C74 0%, #FA233B 100%);
-            transform: translateY(-2px);
+        /* Optimisations pour écrans larges (tablettes en mode paysage) */
+        @media (min-width: 768px) {
+            .container {
+                padding: 35px 30px;
+            }
+            
+            .music-buttons {
+                flex-direction: row;
+            }
+            
+            .spotify-search-btn, .applemusic-search-btn {
+                flex: 1;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎵 Ta Chanson N°1</h1>
-        <p class="subtitle">Découvre quelle chanson était numéro 1 le mois de ta naissance et écoute-la sur Spotify</p>
+        <p class="subtitle">Découvre quelle chanson était numéro 1 le mois de ta naissance et écoute-la !</p>
         
         <form id="birthdateForm">
             <div class="form-group">
@@ -353,8 +380,8 @@
                     loading.classList.remove('show');
                     result.classList.add('show');
                     
-                    // Créer un lien de recherche Spotify
-                    createSpotifyLink(song.title, song.artist);
+                    // Créer les liens de recherche
+                    createMusicLinks(song.title, song.artist);
                 } else {
                     loading.classList.remove('show');
                     error.textContent = `Désolé, les données pour ${getMonthName(month)} ${year} ne sont pas encore disponibles.`;
@@ -363,21 +390,20 @@
             }, 500);
         });
 
-        function createSpotifyLink(title, artist) {
+        function createMusicLinks(title, artist) {
             const spotifyContainer = document.getElementById('spotifyContainer');
             
-            // Créer une URL de recherche Spotify
+            // Créer les URLs de recherche
             const spotifyQuery = encodeURIComponent(`${title} ${artist}`);
             const spotifySearchUrl = `https://open.spotify.com/search/${spotifyQuery}`;
             
-            // Créer une URL de recherche Apple Music
             const appleMusicQuery = encodeURIComponent(`${title} ${artist}`);
             const appleMusicSearchUrl = `https://music.apple.com/search?term=${appleMusicQuery}`;
             
             spotifyContainer.innerHTML = `
                 <div class="music-buttons">
                     <a href="${spotifySearchUrl}" target="_blank" class="spotify-search-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
                         </svg>
                         Spotify
@@ -386,7 +412,7 @@
                         🍎 Apple Music
                     </a>
                 </div>
-                <p class="spotify-note">Clique pour rechercher et écouter cette chanson ! 🎧</p>
+                <p class="spotify-note">Écoute cette chanson maintenant ! 🎧</p>
             `;
         }
 
