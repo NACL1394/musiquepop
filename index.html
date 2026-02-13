@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chanson N°1 à ta naissance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .song-title {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .artist {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .date-info {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .spotify-container {
+            margin-top: 20px;
+        }
+
+        .spotify-player {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .spotify-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #1DB954;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .spotify-link:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .spotify-note {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .spotify-search-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #1DB954;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .spotify-search-btn:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Ta Chanson N°1</h1>
+        <p class="subtitle">Découvre quelle chanson était numéro 1 le mois de ta naissance et écoute-la sur Spotify</p>
+        
+        <form id="birthdateForm">
+            <div class="form-group">
+                <label for="month">Mois de naissance :</label>
+                <select id="month" required>
+                    <option value="">Sélectionne un mois</option>
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="year">Année de naissance :</label>
+                <input type="number" id="year" min="1990" max="2025" placeholder="Ex: 1995" required>
+            </div>
+
+            <button type="submit">Découvrir ma chanson 🎶</button>
+        </form>
+
+        <div class="loading" id="loading">Recherche en cours...</div>
+        <div class="error" id="error"></div>
+
+        <div class="result" id="result">
+            <div class="song-title" id="songTitle"></div>
+            <div class="artist" id="artist"></div>
+            <div class="date-info" id="dateInfo"></div>
+            <div class="spotify-container" id="spotifyContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base de données étendue des chansons #1 Billboard Hot 100
+        const songsDatabase = {
+            1990: {1: {title: "Another Day in Paradise", artist: "Phil Collins"}, 2: {title: "Opposites Attract", artist: "Paula Abdul"}, 3: {title: "Black Velvet", artist: "Alannah Myles"}, 4: {title: "I'll Be Your Everything", artist: "Tommy Page"}, 5: {title: "Vogue", artist: "Madonna"}, 6: {title: "Hold On", artist: "Wilson Phillips"}, 7: {title: "Vision of Love", artist: "Mariah Carey"}, 8: {title: "Vision of Love", artist: "Mariah Carey"}, 9: {title: "Release Me", artist: "Wilson Phillips"}, 10: {title: "I Don't Have the Heart", artist: "James Ingram"}, 11: {title: "Love Takes Time", artist: "Mariah Carey"}, 12: {title: "Because I Love You", artist: "Stevie B"}},
+            1991: {1: {title: "Love Will Never Do", artist: "Janet Jackson"}, 2: {title: "Gonna Make You Sweat", artist: "C+C Music Factory"}, 3: {title: "Coming Out of the Dark", artist: "Gloria Estefan"}, 4: {title: "You're in Love", artist: "Wilson Phillips"}, 5: {title: "I Like the Way", artist: "Hi-Five"}, 6: {title: "More Than Words", artist: "Extreme"}, 7: {title: "Rush Rush", artist: "Paula Abdul"}, 8: {title: "The Promise of a New Day", artist: "Paula Abdul"}, 9: {title: "I Adore Mi Amor", artist: "Color Me Badd"}, 10: {title: "Emotions", artist: "Mariah Carey"}, 11: {title: "When a Man Loves a Woman", artist: "Michael Bolton"}, 12: {title: "Black or White", artist: "Michael Jackson"}},
+            1992: {1: {title: "Black or White", artist: "Michael Jackson"}, 2: {title: "I'm Too Sexy", artist: "Right Said Fred"}, 3: {title: "To Be with You", artist: "Mr. Big"}, 4: {title: "Save the Best for Last", artist: "Vanessa Williams"}, 5: {title: "Jump", artist: "Kris Kross"}, 6: {title: "I'll Be There", artist: "Mariah Carey"}, 7: {title: "Baby Got Back", artist: "Sir Mix-a-Lot"}, 8: {title: "End of the Road", artist: "Boyz II Men"}, 9: {title: "End of the Road", artist: "Boyz II Men"}, 10: {title: "End of the Road", artist: "Boyz II Men"}, 11: {title: "How Do You Talk to an Angel", artist: "The Heights"}, 12: {title: "I Will Always Love You", artist: "Whitney Houston"}},
+            1993: {1: {title: "I Will Always Love You", artist: "Whitney Houston"}, 2: {title: "I Will Always Love You", artist: "Whitney Houston"}, 3: {title: "A Whole New World", artist: "Peabo Bryson & Regina Belle"}, 4: {title: "Informer", artist: "Snow"}, 5: {title: "Freak Me", artist: "Silk"}, 6: {title: "That's the Way Love Goes", artist: "Janet Jackson"}, 7: {title: "Weak", artist: "SWV"}, 8: {title: "Can't Help Falling in Love", artist: "UB40"}, 9: {title: "Dreamlover", artist: "Mariah Carey"}, 10: {title: "I'd Do Anything for Love", artist: "Meat Loaf"}, 11: {title: "I'd Do Anything for Love", artist: "Meat Loaf"}, 12: {title: "Hero", artist: "Mariah Carey"}},
+            1994: {1: {title: "Hero", artist: "Mariah Carey"}, 2: {title: "The Power of Love", artist: "Celine Dion"}, 3: {title: "The Sign", artist: "Ace of Base"}, 4: {title: "Bump n' Grind", artist: "R. Kelly"}, 5: {title: "The Sign", artist: "Ace of Base"}, 6: {title: "I Swear", artist: "All-4-One"}, 7: {title: "I Swear", artist: "All-4-One"}, 8: {title: "Stay", artist: "Lisa Loeb & Nine Stories"}, 9: {title: "I'll Make Love to You", artist: "Boyz II Men"}, 10: {title: "I'll Make Love to You", artist: "Boyz II Men"}, 11: {title: "I'll Make Love to You", artist: "Boyz II Men"}, 12: {title: "On Bended Knee", artist: "Boyz II Men"}},
+            1995: {1: {title: "On Bended Knee", artist: "Boyz II Men"}, 2: {title: "Creep", artist: "TLC"}, 3: {title: "Take a Bow", artist: "Madonna"}, 4: {title: "Take a Bow", artist: "Madonna"}, 5: {title: "This Is How We Do It", artist: "Montell Jordan"}, 6: {title: "Have You Ever Really Loved a Woman?", artist: "Bryan Adams"}, 7: {title: "Waterfalls", artist: "TLC"}, 8: {title: "Kiss from a Rose", artist: "Seal"}, 9: {title: "Gangsta's Paradise", artist: "Coolio ft. L.V."}, 10: {title: "Fantasy", artist: "Mariah Carey"}, 11: {title: "Exhale", artist: "Whitney Houston"}, 12: {title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men"}},
+            1996: {1: {title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men"}, 2: {title: "One Sweet Day", artist: "Mariah Carey & Boyz II Men"}, 3: {title: "Because You Loved Me", artist: "Celine Dion"}, 4: {title: "Always Be My Baby", artist: "Mariah Carey"}, 5: {title: "Tha Crossroads", artist: "Bone Thugs-n-Harmony"}, 6: {title: "You're Makin' Me High", artist: "Toni Braxton"}, 7: {title: "How Do U Want It", artist: "2Pac"}, 8: {title: "Macarena", artist: "Los Del Rio"}, 9: {title: "Macarena", artist: "Los Del Rio"}, 10: {title: "Macarena", artist: "Los Del Rio"}, 11: {title: "No Diggity", artist: "BLACKstreet ft. Dr. Dre"}, 12: {title: "Un-Break My Heart", artist: "Toni Braxton"}},
+            1997: {1: {title: "Un-Break My Heart", artist: "Toni Braxton"}, 2: {title: "Un-Break My Heart", artist: "Toni Braxton"}, 3: {title: "Wannabe", artist: "Spice Girls"}, 4: {title: "Can't Nobody Hold Me Down", artist: "Puff Daddy ft. Mase"}, 5: {title: "Hypnotize", artist: "The Notorious B.I.G."}, 6: {title: "MMM Bop", artist: "Hanson"}, 7: {title: "I'll Be Missing You", artist: "Puff Daddy & Faith Evans"}, 8: {title: "I'll Be Missing You", artist: "Puff Daddy & Faith Evans"}, 9: {title: "Honey", artist: "Mariah Carey"}, 10: {title: "Candle in the Wind 1997", artist: "Elton John"}, 11: {title: "Candle in the Wind 1997", artist: "Elton John"}, 12: {title: "Candle in the Wind 1997", artist: "Elton John"}},
+            1998: {1: {title: "Truly Madly Deeply", artist: "Savage Garden"}, 2: {title: "Together Again", artist: "Janet Jackson"}, 3: {title: "My Heart Will Go On", artist: "Celine Dion"}, 4: {title: "My Heart Will Go On", artist: "Celine Dion"}, 5: {title: "Too Close", artist: "Next"}, 6: {title: "The Boy Is Mine", artist: "Brandy & Monica"}, 7: {title: "The Boy Is Mine", artist: "Brandy & Monica"}, 8: {title: "I Don't Want to Miss a Thing", artist: "Aerosmith"}, 9: {title: "I Don't Want to Miss a Thing", artist: "Aerosmith"}, 10: {title: "The First Night", artist: "Monica"}, 11: {title: "Doo Wop", artist: "Lauryn Hill"}, 12: {title: "I'm Your Angel", artist: "R. Kelly & Celine Dion"}},
+            1999: {1: {title: "I'm Your Angel", artist: "R. Kelly & Celine Dion"}, 2: {title: "...Baby One More Time", artist: "Britney Spears"}, 3: {title: "Believe", artist: "Cher"}, 4: {title: "No Scrubs", artist: "TLC"}, 5: {title: "Livin' la Vida Loca", artist: "Ricky Martin"}, 6: {title: "If You Had My Love", artist: "Jennifer Lopez"}, 7: {title: "Wild Wild West", artist: "Will Smith"}, 8: {title: "Genie in a Bottle", artist: "Christina Aguilera"}, 9: {title: "Smooth", artist: "Santana ft. Rob Thomas"}, 10: {title: "Smooth", artist: "Santana ft. Rob Thomas"}, 11: {title: "Smooth", artist: "Santana ft. Rob Thomas"}, 12: {title: "Smooth", artist: "Santana ft. Rob Thomas"}},
+            2000: {1: {title: "Smooth", artist: "Santana ft. Rob Thomas"}, 2: {title: "I Knew I Loved You", artist: "Savage Garden"}, 3: {title: "Say My Name", artist: "Destiny's Child"}, 4: {title: "Maria Maria", artist: "Santana ft. The Product G&B"}, 5: {title: "Maria Maria", artist: "Santana ft. The Product G&B"}, 6: {title: "Try Again", artist: "Aaliyah"}, 7: {title: "It's Gonna Be Me", artist: "*NSYNC"}, 8: {title: "Bent", artist: "Matchbox Twenty"}, 9: {title: "Music", artist: "Madonna"}, 10: {title: "Come On Over Baby", artist: "Christina Aguilera"}, 11: {title: "With Arms Wide Open", artist: "Creed"}, 12: {title: "Independent Women Part I", artist: "Destiny's Child"}},
+            2001: {1: {title: "Independent Women Part I", artist: "Destiny's Child"}, 2: {title: "It Wasn't Me", artist: "Shaggy ft. RikRok"}, 3: {title: "Stutter", artist: "Joe ft. Mystikal"}, 4: {title: "Butterfly", artist: "Crazy Town"}, 5: {title: "All for You", artist: "Janet Jackson"}, 6: {title: "Lady Marmalade", artist: "Christina, Lil' Kim, Mya, P!nk"}, 7: {title: "U Remind Me", artist: "Usher"}, 8: {title: "Fallin'", artist: "Alicia Keys"}, 9: {title: "I'm Real", artist: "Jennifer Lopez ft. Ja Rule"}, 10: {title: "I'm Real", artist: "Jennifer Lopez ft. Ja Rule"}, 11: {title: "Family Affair", artist: "Mary J. Blige"}, 12: {title: "How You Remind Me", artist: "Nickelback"}},
+            2002: {1: {title: "How You Remind Me", artist: "Nickelback"}, 2: {title: "U Got It Bad", artist: "Usher"}, 3: {title: "Ain't It Funny", artist: "Jennifer Lopez ft. Ja Rule"}, 4: {title: "Foolish", artist: "Ashanti"}, 5: {title: "Hot in Herre", artist: "Nelly"}, 6: {title: "Hot in Herre", artist: "Nelly"}, 7: {title: "Hot in Herre", artist: "Nelly"}, 8: {title: "Dilemma", artist: "Nelly ft. Kelly Rowland"}, 9: {title: "Dilemma", artist: "Nelly ft. Kelly Rowland"}, 10: {title: "Dilemma", artist: "Nelly ft. Kelly Rowland"}, 11: {title: "Lose Yourself", artist: "Eminem"}, 12: {title: "Lose Yourself", artist: "Eminem"}},
+            2003: {1: {title: "Lose Yourself", artist: "Eminem"}, 2: {title: "Bump, Bump, Bump", artist: "B2K & P. Diddy"}, 3: {title: "In Da Club", artist: "50 Cent"}, 4: {title: "In Da Club", artist: "50 Cent"}, 5: {title: "Get Busy", artist: "Sean Paul"}, 6: {title: "21 Questions", artist: "50 Cent ft. Nate Dogg"}, 7: {title: "Crazy in Love", artist: "Beyoncé ft. Jay-Z"}, 8: {title: "Crazy in Love", artist: "Beyoncé ft. Jay-Z"}, 9: {title: "Shake Ya Tailfeather", artist: "Nelly, P. Diddy & Murphy Lee"}, 10: {title: "Baby Boy", artist: "Beyoncé ft. Sean Paul"}, 11: {title: "Stand Up", artist: "Ludacris"}, 12: {title: "Hey Ya!", artist: "OutKast"}},
+            2004: {1: {title: "Hey Ya!", artist: "OutKast"}, 2: {title: "The Way You Move", artist: "OutKast ft. Sleepy Brown"}, 3: {title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris"}, 4: {title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris"}, 5: {title: "Yeah!", artist: "Usher ft. Lil Jon & Ludacris"}, 6: {title: "Burn", artist: "Usher"}, 7: {title: "Burn", artist: "Usher"}, 8: {title: "Lean Back", artist: "Terror Squad"}, 9: {title: "Goodies", artist: "Ciara ft. Petey Pablo"}, 10: {title: "My Boo", artist: "Usher & Alicia Keys"}, 11: {title: "Drop It Like It's Hot", artist: "Snoop Dogg ft. Pharrell"}, 12: {title: "Let Me Love You", artist: "Mario"}},
+            2005: {1: {title: "Let Me Love You", artist: "Mario"}, 2: {title: "Let Me Love You", artist: "Mario"}, 3: {title: "Candy Shop", artist: "50 Cent ft. Olivia"}, 4: {title: "Candy Shop", artist: "50 Cent ft. Olivia"}, 5: {title: "Hollaback Girl", artist: "Gwen Stefani"}, 6: {title: "We Belong Together", artist: "Mariah Carey"}, 7: {title: "We Belong Together", artist: "Mariah Carey"}, 8: {title: "We Belong Together", artist: "Mariah Carey"}, 9: {title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx"}, 10: {title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx"}, 11: {title: "Gold Digger", artist: "Kanye West ft. Jamie Foxx"}, 12: {title: "Don't Forget About Us", artist: "Mariah Carey"}},
+            2006: {1: {title: "Don't Forget About Us", artist: "Mariah Carey"}, 2: {title: "Grillz", artist: "Nelly ft. Paul Wall"}, 3: {title: "Bad Day", artist: "Daniel Powter"}, 4: {title: "So Sick", artist: "Ne-Yo"}, 5: {title: "Ridin'", artist: "Chamillionaire ft. Krayzie Bone"}, 6: {title: "Ridin'", artist: "Chamillionaire ft. Krayzie Bone"}, 7: {title: "Promiscuous", artist: "Nelly Furtado ft. Timbaland"}, 8: {title: "London Bridge", artist: "Fergie"}, 9: {title: "SexyBack", artist: "Justin Timberlake"}, 10: {title: "My Love", artist: "Justin Timberlake ft. T.I."}, 11: {title: "My Love", artist: "Justin Timberlake ft. T.I."}, 12: {title: "Irreplaceable", artist: "Beyoncé"}},
+            2007: {1: {title: "Irreplaceable", artist: "Beyoncé"}, 2: {title: "Irreplaceable", artist: "Beyoncé"}, 3: {title: "Say It Right", artist: "Nelly Furtado"}, 4: {title: "Glamorous", artist: "Fergie ft. Ludacris"}, 5: {title: "Umbrella", artist: "Rihanna ft. Jay-Z"}, 6: {title: "Umbrella", artist: "Rihanna ft. Jay-Z"}, 7: {title: "Umbrella", artist: "Rihanna ft. Jay-Z"}, 8: {title: "Big Girls Don't Cry", artist: "Fergie"}, 9: {title: "Crank That", artist: "Soulja Boy"}, 10: {title: "No One", artist: "Alicia Keys"}, 11: {title: "No One", artist: "Alicia Keys"}, 12: {title: "No One", artist: "Alicia Keys"}},
+            2008: {1: {title: "Low", artist: "Flo Rida ft. T-Pain"}, 2: {title: "Low", artist: "Flo Rida ft. T-Pain"}, 3: {title: "Love Song", artist: "Sara Bareilles"}, 4: {title: "Bleeding Love", artist: "Leona Lewis"}, 5: {title: "Lollipop", artist: "Lil Wayne"}, 6: {title: "Take a Bow", artist: "Rihanna"}, 7: {title: "I Kissed a Girl", artist: "Katy Perry"}, 8: {title: "Disturbia", artist: "Rihanna"}, 9: {title: "Whatever You Like", artist: "T.I."}, 10: {title: "So What", artist: "P!nk"}, 11: {title: "Live Your Life", artist: "T.I. ft. Rihanna"}, 12: {title: "Single Ladies", artist: "Beyoncé"}},
+            2009: {1: {title: "Single Ladies", artist: "Beyoncé"}, 2: {title: "Just Dance", artist: "Lady Gaga ft. Colby O'Donis"}, 3: {title: "Poker Face", artist: "Lady Gaga"}, 4: {title: "Boom Boom Pow", artist: "The Black Eyed Peas"}, 5: {title: "Boom Boom Pow", artist: "The Black Eyed Peas"}, 6: {title: "I Gotta Feeling", artist: "The Black Eyed Peas"}, 7: {title: "I Gotta Feeling", artist: "The Black Eyed Peas"}, 8: {title: "I Gotta Feeling", artist: "The Black Eyed Peas"}, 9: {title: "I Gotta Feeling", artist: "The Black Eyed Peas"}, 10: {title: "Empire State of Mind", artist: "Jay-Z ft. Alicia Keys"}, 11: {title: "Empire State of Mind", artist: "Jay-Z ft. Alicia Keys"}, 12: {title: "Empire State of Mind", artist: "Jay-Z ft. Alicia Keys"}},
+            2010: {1: {title: "Tik Tok", artist: "Ke$ha"}, 2: {title: "Tik Tok", artist: "Ke$ha"}, 3: {title: "Rude Boy", artist: "Rihanna"}, 4: {title: "Rude Boy", artist: "Rihanna"}, 5: {title: "OMG", artist: "Usher ft. will.i.am"}, 6: {title: "California Gurls", artist: "Katy Perry ft. Snoop Dogg"}, 7: {title: "Love the Way You Lie", artist: "Eminem ft. Rihanna"}, 8: {title: "Love the Way You Lie", artist: "Eminem ft. Rihanna"}, 9: {title: "Just the Way You Are", artist: "Bruno Mars"}, 10: {title: "Like a G6", artist: "Far East Movement"}, 11: {title: "We R Who We R", artist: "Ke$ha"}, 12: {title: "Firework", artist: "Katy Perry"}},
+            2011: {1: {title: "Firework", artist: "Katy Perry"}, 2: {title: "Grenade", artist: "Bruno Mars"}, 3: {title: "Born This Way", artist: "Lady Gaga"}, 4: {title: "E.T.", artist: "Katy Perry ft. Kanye West"}, 5: {title: "Rolling in the Deep", artist: "Adele"}, 6: {title: "Give Me Everything", artist: "Pitbull ft. Ne-Yo"}, 7: {title: "Party Rock Anthem", artist: "LMFAO"}, 8: {title: "Someone Like You", artist: "Adele"}, 9: {title: "We Found Love", artist: "Rihanna ft. Calvin Harris"}, 10: {title: "We Found Love", artist: "Rihanna ft. Calvin Harris"}, 11: {title: "We Found Love", artist: "Rihanna ft. Calvin Harris"}, 12: {title: "Set Fire to the Rain", artist: "Adele"}},
+            2012: {1: {title: "Set Fire to the Rain", artist: "Adele"}, 2: {title: "Stronger", artist: "Kelly Clarkson"}, 3: {title: "We Are Young", artist: "fun. ft. Janelle Monáe"}, 4: {title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra"}, 5: {title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra"}, 6: {title: "Call Me Maybe", artist: "Carly Rae Jepsen"}, 7: {title: "Call Me Maybe", artist: "Carly Rae Jepsen"}, 8: {title: "Whistle", artist: "Flo Rida"}, 9: {title: "We Are Never Getting Back Together", artist: "Taylor Swift"}, 10: {title: "One More Night", artist: "Maroon 5"}, 11: {title: "Diamonds", artist: "Rihanna"}, 12: {title: "Locked Out of Heaven", artist: "Bruno Mars"}},
+            2013: {1: {title: "Locked Out of Heaven", artist: "Bruno Mars"}, 2: {title: "Thrift Shop", artist: "Macklemore & Ryan Lewis"}, 3: {title: "Harlem Shake", artist: "Baauer"}, 4: {title: "Just Give Me a Reason", artist: "P!nk ft. Nate Ruess"}, 5: {title: "Can't Hold Us", artist: "Macklemore & Ryan Lewis"}, 6: {title: "Blurred Lines", artist: "Robin Thicke ft. T.I. & Pharrell"}, 7: {title: "Blurred Lines", artist: "Robin Thicke ft. T.I. & Pharrell"}, 8: {title: "Blurred Lines", artist: "Robin Thicke ft. T.I. & Pharrell"}, 9: {title: "Roar", artist: "Katy Perry"}, 10: {title: "Wrecking Ball", artist: "Miley Cyrus"}, 11: {title: "Royals", artist: "Lorde"}, 12: {title: "The Monster", artist: "Eminem ft. Rihanna"}},
+            2014: {1: {title: "The Monster", artist: "Eminem ft. Rihanna"}, 2: {title: "Dark Horse", artist: "Katy Perry ft. Juicy J"}, 3: {title: "Happy", artist: "Pharrell Williams"}, 4: {title: "Happy", artist: "Pharrell Williams"}, 5: {title: "All of Me", artist: "John Legend"}, 6: {title: "Fancy", artist: "Iggy Azalea ft. Charli XCX"}, 7: {title: "Fancy", artist: "Iggy Azalea ft. Charli XCX"}, 8: {title: "Shake It Off", artist: "Taylor Swift"}, 9: {title: "All About That Bass", artist: "Meghan Trainor"}, 10: {title: "Shake It Off", artist: "Taylor Swift"}, 11: {title: "Blank Space", artist: "Taylor Swift"}, 12: {title: "Blank Space", artist: "Taylor Swift"}},
+            2015: {1: {title: "Blank Space", artist: "Taylor Swift"}, 2: {title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars"}, 3: {title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars"}, 4: {title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars"}, 5: {title: "See You Again", artist: "Wiz Khalifa ft. Charlie Puth"}, 6: {title: "Bad Blood", artist: "Taylor Swift ft. Kendrick Lamar"}, 7: {title: "Can't Feel My Face", artist: "The Weeknd"}, 8: {title: "Can't Feel My Face", artist: "The Weeknd"}, 9: {title: "What Do You Mean?", artist: "Justin Bieber"}, 10: {title: "The Hills", artist: "The Weeknd"}, 11: {title: "Hello", artist: "Adele"}, 12: {title: "Hello", artist: "Adele"}},
+            2016: {1: {title: "Hello", artist: "Adele"}, 2: {title: "Love Yourself", artist: "Justin Bieber"}, 3: {title: "Work", artist: "Rihanna ft. Drake"}, 4: {title: "Work", artist: "Rihanna ft. Drake"}, 5: {title: "Panda", artist: "Desiigner"}, 6: {title: "One Dance", artist: "Drake ft. Wizkid & Kyla"}, 7: {title: "One Dance", artist: "Drake ft. Wizkid & Kyla"}, 8: {title: "Cheap Thrills", artist: "Sia"}, 9: {title: "Closer", artist: "The Chainsmokers ft. Halsey"}, 10: {title: "Closer", artist: "The Chainsmokers ft. Halsey"}, 11: {title: "Starboy", artist: "The Weeknd ft. Daft Punk"}, 12: {title: "Black Beatles", artist: "Rae Sremmurd"}},
+            2017: {1: {title: "Black Beatles", artist: "Rae Sremmurd"}, 2: {title: "Shape of You", artist: "Ed Sheeran"}, 3: {title: "Shape of You", artist: "Ed Sheeran"}, 4: {title: "Shape of You", artist: "Ed Sheeran"}, 5: {title: "Despacito", artist: "Luis Fonsi & Daddy Yankee ft. Justin Bieber"}, 6: {title: "Despacito", artist: "Luis Fonsi & Daddy Yankee ft. Justin Bieber"}, 7: {title: "Despacito", artist: "Luis Fonsi & Daddy Yankee ft. Justin Bieber"}, 8: {title: "Despacito", artist: "Luis Fonsi & Daddy Yankee ft. Justin Bieber"}, 9: {title: "Look What You Made Me Do", artist: "Taylor Swift"}, 10: {title: "Rockstar", artist: "Post Malone ft. 21 Savage"}, 11: {title: "Rockstar", artist: "Post Malone ft. 21 Savage"}, 12: {title: "Rockstar", artist: "Post Malone ft. 21 Savage"}},
+            2018: {1: {title: "Rockstar", artist: "Post Malone ft. 21 Savage"}, 2: {title: "God's Plan", artist: "Drake"}, 3: {title: "God's Plan", artist: "Drake"}, 4: {title: "God's Plan", artist: "Drake"}, 5: {title: "Nice for What", artist: "Drake"}, 6: {title: "This Is America", artist: "Childish Gambino"}, 7: {title: "Girls Like You", artist: "Maroon 5 ft. Cardi B"}, 8: {title: "In My Feelings", artist: "Drake"}, 9: {title: "Girls Like You", artist: "Maroon 5 ft. Cardi B"}, 10: {title: "Girls Like You", artist: "Maroon 5 ft. Cardi B"}, 11: {title: "Thank U, Next", artist: "Ariana Grande"}, 12: {title: "Thank U, Next", artist: "Ariana Grande"}},
+            2019: {1: {title: "Thank U, Next", artist: "Ariana Grande"}, 2: {title: "7 Rings", artist: "Ariana Grande"}, 3: {title: "Sucker", artist: "Jonas Brothers"}, 4: {title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus"}, 5: {title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus"}, 6: {title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus"}, 7: {title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus"}, 8: {title: "Old Town Road", artist: "Lil Nas X ft. Billy Ray Cyrus"}, 9: {title: "Señorita", artist: "Shawn Mendes & Camila Cabello"}, 10: {title: "Truth Hurts", artist: "Lizzo"}, 11: {title: "Circles", artist: "Post Malone"}, 12: {title: "Lose You to Love Me", artist: "Selena Gomez"}},
+            2020: {1: {title: "Lose You to Love Me", artist: "Selena Gomez"}, 2: {title: "The Box", artist: "Roddy Ricch"}, 3: {title: "The Box", artist: "Roddy Ricch"}, 4: {title: "Blinding Lights", artist: "The Weeknd"}, 5: {title: "Say So", artist: "Doja Cat"}, 6: {title: "Rockstar", artist: "DaBaby ft. Roddy Ricch"}, 7: {title: "Rockstar", artist: "DaBaby ft. Roddy Ricch"}, 8: {title: "WAP", artist: "Cardi B ft. Megan Thee Stallion"}, 9: {title: "WAP", artist: "Cardi B ft. Megan Thee Stallion"}, 10: {title: "Savage", artist: "Megan Thee Stallion"}, 11: {title: "Mood", artist: "24kGoldn ft. iann dior"}, 12: {title: "Willow", artist: "Taylor Swift"}},
+            2021: {1: {title: "Willow", artist: "Taylor Swift"}, 2: {title: "Drivers License", artist: "Olivia Rodrigo"}, 3: {title: "Drivers License", artist: "Olivia Rodrigo"}, 4: {title: "Peaches", artist: "Justin Bieber ft. Daniel Caesar & Giveon"}, 5: {title: "Leave The Door Open", artist: "Silk Sonic"}, 6: {title: "Good 4 U", artist: "Olivia Rodrigo"}, 7: {title: "Butter", artist: "BTS"}, 8: {title: "Stay", artist: "The Kid LAROI & Justin Bieber"}, 9: {title: "Stay", artist: "The Kid LAROI & Justin Bieber"}, 10: {title: "My Universe", artist: "Coldplay & BTS"}, 11: {title: "Easy On Me", artist: "Adele"}, 12: {title: "All I Want for Christmas Is You", artist: "Mariah Carey"}},
+            2022: {1: {title: "Easy On Me", artist: "Adele"}, 2: {title: "We Don't Talk About Bruno", artist: "Encanto Cast"}, 3: {title: "Heat Waves", artist: "Glass Animals"}, 4: {title: "As It Was", artist: "Harry Styles"}, 5: {title: "First Class", artist: "Jack Harlow"}, 6: {title: "Running Up That Hill", artist: "Kate Bush"}, 7: {title: "As It Was", artist: "Harry Styles"}, 8: {title: "Super Freaky Girl", artist: "Nicki Minaj"}, 9: {title: "Anti-Hero", artist: "Taylor Swift"}, 10: {title: "Unholy", artist: "Sam Smith & Kim Petras"}, 11: {title: "Anti-Hero", artist: "Taylor Swift"}, 12: {title: "All I Want for Christmas Is You", artist: "Mariah Carey"}},
+            2023: {1: {title: "Anti-Hero", artist: "Taylor Swift"}, 2: {title: "Flowers", artist: "Miley Cyrus"}, 3: {title: "Flowers", artist: "Miley Cyrus"}, 4: {title: "Last Night", artist: "Morgan Wallen"}, 5: {title: "Last Night", artist: "Morgan Wallen"}, 6: {title: "Like Crazy", artist: "Jimin"}, 7: {title: "Calm Down", artist: "Rema & Selena Gomez"}, 8: {title: "Anti-Hero", artist: "Taylor Swift"}, 9: {title: "Paint The Town Red", artist: "Doja Cat"}, 10: {title: "Cruel Summer", artist: "Taylor Swift"}, 11: {title: "Is It Over Now?", artist: "Taylor Swift"}, 12: {title: "All I Want for Christmas Is You", artist: "Mariah Carey"}},
+            2024: {1: {title: "Cruel Summer", artist: "Taylor Swift"}, 2: {title: "We Can't Be Friends", artist: "Ariana Grande"}, 3: {title: "we can't be friends", artist: "Ariana Grande"}, 4: {title: "Fortnight", artist: "Taylor Swift ft. Post Malone"}, 5: {title: "Not Like Us", artist: "Kendrick Lamar"}, 6: {title: "Not Like Us", artist: "Kendrick Lamar"}, 7: {title: "I Had Some Help", artist: "Post Malone ft. Morgan Wallen"}, 8: {title: "A Bar Song (Tipsy)", artist: "Shaboozey"}, 9: {title: "A Bar Song (Tipsy)", artist: "Shaboozey"}, 10: {title: "A Bar Song (Tipsy)", artist: "Shaboozey"}, 11: {title: "A Bar Song (Tipsy)", artist: "Shaboozey"}, 12: {title: "All I Want for Christmas Is You", artist: "Mariah Carey"}},
+            2025: {1: {title: "All I Want for Christmas Is You", artist: "Mariah Carey"}, 2: {title: "APT.", artist: "Rosé & Bruno Mars"}}
+        };
+
+        document.getElementById('birthdateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+            
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const result = document.getElementById('result');
+            
+            loading.classList.remove('show');
+            error.classList.remove('show');
+            result.classList.remove('show');
+            
+            if (!month || !year) {
+                error.textContent = 'Veuillez remplir tous les champs';
+                error.classList.add('show');
+                return;
+            }
+            
+            loading.classList.add('show');
+            
+            setTimeout(async () => {
+                if (songsDatabase[year] && songsDatabase[year][month]) {
+                    const song = songsDatabase[year][month];
+                    
+                    document.getElementById('songTitle').textContent = song.title;
+                    document.getElementById('artist').textContent = `Par ${song.artist}`;
+                    document.getElementById('dateInfo').textContent = `Numéro 1 en ${getMonthName(month)} ${year}`;
+                    
+                    loading.classList.remove('show');
+                    result.classList.add('show');
+                    
+                    // Créer un lien de recherche Spotify
+                    createSpotifyLink(song.title, song.artist);
+                } else {
+                    loading.classList.remove('show');
+                    error.textContent = `Désolé, les données pour ${getMonthName(month)} ${year} ne sont pas encore disponibles.`;
+                    error.classList.add('show');
+                }
+            }, 500);
+        });
+
+        function createSpotifyLink(title, artist) {
+            const spotifyContainer = document.getElementById('spotifyContainer');
+            
+            // Créer une URL de recherche Spotify
+            const query = encodeURIComponent(`${title} ${artist}`);
+            const spotifySearchUrl = `https://open.spotify.com/search/${query}`;
+            
+            spotifyContainer.innerHTML = `
+                <a href="${spotifySearchUrl}" target="_blank" class="spotify-search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                    </svg>
+                    Écouter sur Spotify
+                </a>
+                <p class="spotify-note">Clique pour rechercher et écouter cette chanson sur Spotify ! 🎧</p>
+            `;
+        }
+
+        function getMonthName(monthNum) {
+            const months = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
+                          'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+            return months[monthNum];
+        }
+    </script>
+</body>
+</html>
